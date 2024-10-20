@@ -5,7 +5,6 @@ import org.apache.poi.ss.usermodel.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
 
 public class ExcelService {
     private final String FILE_DIR_PATH = "/home/zhyun/my-projects/study-excel-and-zip-file-control/excel/%s";
@@ -18,6 +17,8 @@ public class ExcelService {
     public void printAll(String filename) {
         printFilename(filename);
 
+        DataFormatter formatter = new DataFormatter();
+
         try (InputStream inp = new FileInputStream(FILE_DIR_PATH.formatted(filename))) {
             Workbook wb = WorkbookFactory.create(inp);
 
@@ -28,13 +29,8 @@ public class ExcelService {
                     System.out.printf("%5d row ==============================\n", row.getRowNum());
 
                     for (Cell cell : row) {
-                        CellType cellType = cell.getCellType();
-                        switch (cellType) {
-                            case STRING  -> System.out.println(cell.getStringCellValue());
-                            case NUMERIC -> System.out.println(BigDecimal.valueOf(cell.getNumericCellValue()).toPlainString());
-                            case BOOLEAN -> System.out.println(cell.getBooleanCellValue());
-                            case ERROR   -> System.out.printf("error: %s\n", cell.getErrorCellValue());
-                        }
+                        String value = formatter.formatCellValue(cell);
+                        System.out.println(value);
                     }
 
                     System.out.println();
