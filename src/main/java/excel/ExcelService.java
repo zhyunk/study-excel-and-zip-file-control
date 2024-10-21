@@ -1,6 +1,8 @@
 package excel;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -9,6 +11,24 @@ import java.io.InputStream;
 public class ExcelService {
     private final String FILE_DIR_PATH = "/home/zhyun/my-projects/study-excel-and-zip-file-control/excel/%s";
 
+
+    /**
+     * 암호화 엑셀 읽기
+     */
+    public void printAllSecret(String filename, String password) {
+        printFilename(filename);
+
+        try (FileInputStream fis = new FileInputStream(FILE_DIR_PATH.formatted(filename));
+             var workbook = filename.endsWith(".xlsx") ?
+                     (XSSFWorkbook) WorkbookFactory.create(fis, password) :
+                     (HSSFWorkbook) WorkbookFactory.create(fis, password)) {
+
+                readWorkbook(workbook);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * 전체 내용 출력
