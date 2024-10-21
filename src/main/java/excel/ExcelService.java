@@ -6,7 +6,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class ExcelService {
     private final String FILE_DIR_PATH = "/home/zhyun/my-projects/study-excel-and-zip-file-control/excel/%s";
@@ -37,8 +36,8 @@ public class ExcelService {
     public void printAll(String filename) {
         printFilename(filename);
 
-        try (InputStream inp = new FileInputStream(FILE_DIR_PATH.formatted(filename))) {
-            Workbook wb = WorkbookFactory.create(inp);
+        try (FileInputStream fis = new FileInputStream(FILE_DIR_PATH.formatted(filename));
+             Workbook wb = WorkbookFactory.create(fis)) {
 
             readWorkbook(wb);
 
@@ -46,6 +45,8 @@ public class ExcelService {
             throw new RuntimeException(e);
         }
     }
+
+
 
     private void readWorkbook(Workbook wb) {
         DataFormatter formatter = new DataFormatter();
@@ -71,27 +72,5 @@ public class ExcelService {
 
     private void printFilename(String filename) {
         System.out.printf("\n\n\uD83D\uDCBE filename: %s ==================%n", filename);
-    }
-
-
-
-
-
-
-    /**
-     * format
-     * -
-     */
-    public void method(String filename) {
-        printFilename(filename);
-
-        try (InputStream inp = new FileInputStream(FILE_DIR_PATH.formatted(filename))) {
-            Workbook wb = WorkbookFactory.create(inp);
-
-
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
