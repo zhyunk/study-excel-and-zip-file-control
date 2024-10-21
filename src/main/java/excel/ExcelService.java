@@ -17,40 +17,35 @@ public class ExcelService {
     public void printAll(String filename) {
         printFilename(filename);
 
-        DataFormatter formatter = new DataFormatter();
-
         try (InputStream inp = new FileInputStream(FILE_DIR_PATH.formatted(filename))) {
             Workbook wb = WorkbookFactory.create(inp);
 
-            for (Sheet sheet : wb) {
-                System.out.printf("⭐\uFE0F sheet name: %s ==============================\n", sheet.getSheetName());
-
-                int cntCellIterator = 1;
-                int cntGetCell = 1;
-                for (Row row : sheet) {
-                    System.out.printf("%5d row ==============================\n", row.getRowNum());
-
-                    // 빈 셀 생략
-                    for (Cell cell : row) {
-                        String value = formatter.formatCellValue(cell);
-                        System.out.printf("X %d %s\n", cntCellIterator++, value);
-                    }
-
-                    // 빈 셀 출력
-                    short firstCellNum = row.getFirstCellNum();
-                    short lastCellNum = row.getLastCellNum();
-                    for (int i = firstCellNum; i < lastCellNum; i++) {
-                        Cell cell = row.getCell(i, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
-                        String value = formatter.formatCellValue(cell);
-                        System.out.printf("O %d %s\n", cntGetCell++, value);
-                    }
-
-                    System.out.println();
-                }
-            }
+            readWorkbook(wb);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void readWorkbook(Workbook wb) {
+        DataFormatter formatter = new DataFormatter();
+
+        for (Sheet sheet : wb) {
+            System.out.printf("⭐\uFE0F sheet name: %s ==============================\n", sheet.getSheetName());
+
+            for (Row row : sheet) {
+                System.out.printf("%5d row ==============================\n", row.getRowNum());
+
+                short firstCellNum = row.getFirstCellNum();
+                short lastCellNum = row.getLastCellNum();
+                for (int i = firstCellNum; i < lastCellNum; i++) {
+                    Cell cell = row.getCell(i, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
+                    String value = formatter.formatCellValue(cell);
+                    System.out.printf("%s\n", value);
+                }
+
+                System.out.println();
+            }
         }
     }
 

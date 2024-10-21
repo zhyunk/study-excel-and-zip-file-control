@@ -1,13 +1,20 @@
 package excel;
 
 public class Main {
+    static final String FILENAME_XLSX = "test.xlsx";
+    static final String FILENAME_XLS = "test.xls";
+
 
     public static void main(String[] args) {
-        String filename1 = "test.xlsx";
-        String filename2 = "test.xls";
-
         ExcelService excel = new ExcelService();
-        excel.printAll(filename1);
-        excel.printAll(filename2);
+
+        excel.printAll(FILENAME_XLSX);
+        excel.printAll(FILENAME_XLS);
+
+
+
+
+
+
     }
 }
