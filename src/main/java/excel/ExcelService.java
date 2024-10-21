@@ -1,8 +1,6 @@
 package excel;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,11 +16,9 @@ public class ExcelService {
         printFilename(filename);
 
         try (FileInputStream fis = new FileInputStream(FILE_DIR_PATH.formatted(filename));
-             var workbook = filename.endsWith(".xlsx") ?
-                     (XSSFWorkbook) WorkbookFactory.create(fis, password) :
-                     (HSSFWorkbook) WorkbookFactory.create(fis, password)) {
+             Workbook workbook = WorkbookFactory.create(fis, password)) {
 
-                readWorkbook(workbook);
+            readWorkbook(workbook);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
