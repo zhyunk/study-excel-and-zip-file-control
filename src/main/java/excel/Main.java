@@ -13,8 +13,11 @@ public class Main {
 //        excel.printAll(FILENAME_XLSX);
 //        excel.printAll(FILENAME_XLS);
 
-        excel.printAllSecret(FILENAME_PASSWORD_XLS, "1234");
-        excel.printAllSecret(FILENAME_PASSWORD_XLSX, "1234");
+//        excel.printAllSecret(FILENAME_PASSWORD_XLS, "1234");
+//        excel.printAllSecret(FILENAME_PASSWORD_XLSX, "1234");
+
+        excel.create("test", true);
+
 
 
 
