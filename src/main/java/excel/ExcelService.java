@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,6 +18,8 @@ import java.util.List;
 public class ExcelService {
     private final String FILE_DIR_PATH = "/home/zhyun/my-projects/study-excel-and-zip-file-control/excel/%s";
     private final String NEW_FILE_DIR_PATH = "excel/output"; //-> /home/zhyun/my-projects/study-excel-and-zip-file-control/excel/output
+
+    private final DataFormatter formatter = new DataFormatter();
 
 
     /**
@@ -113,7 +116,6 @@ public class ExcelService {
     }
 
     private void readWorkbook(Workbook wb) {
-        DataFormatter formatter = new DataFormatter();
 
         for (Sheet sheet : wb) {
             System.out.printf("⭐\uFE0F sheet name: %s ==============================\n", sheet.getSheetName());
@@ -121,17 +123,34 @@ public class ExcelService {
             for (Row row : sheet) {
                 System.out.printf("%5d row ==============================\n", row.getRowNum());
 
+                Row rowHeader = sheet.getRow(0);
                 short firstCellNum = row.getFirstCellNum();
                 short lastCellNum = row.getLastCellNum();
                 for (int i = firstCellNum; i < lastCellNum; i++) {
                     Cell cell = row.getCell(i, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
-                    String value = formatter.formatCellValue(cell);
-                    System.out.printf("%s\n", value);
+                    String value = getValue(cell);
+
+                    Cell cellHeader = rowHeader.getCell(i, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
+                    String valueHeader = formatter.formatCellValue(cellHeader);
+
+                    System.out.printf("%s: %s\n", valueHeader, value);
                 }
 
                 System.out.println();
             }
         }
+    }
+
+    private String getValue(Cell cell) {
+        boolean isNumber = cell != null ? cell.getCellType() == CellType.NUMERIC : false;
+        boolean isDateFormatted = isNumber ? DateUtil.isCellDateFormatted(cell) : false;
+        boolean isNotDate = isNumber && !isDateFormatted;
+
+        return isNotDate ?
+                cell.getNumericCellValue() == Math.floor(cell.getNumericCellValue()) ?
+                        BigDecimal.valueOf((long) cell.getNumericCellValue()).toPlainString() :
+                        BigDecimal.valueOf(cell.getNumericCellValue()).toPlainString() :
+                formatter.formatCellValue(cell);
     }
 
     private void printFilename(String filename) {
