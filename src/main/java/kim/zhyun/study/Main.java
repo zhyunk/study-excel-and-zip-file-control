@@ -1,6 +1,11 @@
-package excel;
+package kim.zhyun.study;
+
+import kim.zhyun.study.excel.CsvService;
+import kim.zhyun.study.excel.ExcelService;
 
 public class Main {
+    public static final String FILE_DIR_PATH = "sampleFile/%s";
+
     static final String FILENAME_XLSX = "test.xlsx";
     static final String FILENAME_XLS = "test.xls";
     static final String FILENAME_PASSWORD_XLSX = "test-password.xlsx";
@@ -23,7 +28,8 @@ public class Main {
 
 //        excel.create("test", true);
 
-        excel.printAllCsv(FILENAME_CSV);
+        CsvService csv = new CsvService();
+        csv.printAll(FILENAME_CSV);
 
 
 
