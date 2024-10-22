@@ -5,4 +5,4 @@
 - language: java
 - jdk: 20
 - build: gradle 8.8
-- library: [POI](https://poi.apache.org/index.html)
+- library: [`POI`](https://poi.apache.org/index.html), [`zip4j`](https://github.com/srikanth-lingala/zip4j)
